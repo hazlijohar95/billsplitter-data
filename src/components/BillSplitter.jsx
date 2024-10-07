@@ -89,7 +89,7 @@ const BillSplitter = () => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">Bill Splitter</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">Simple Bill Splitter</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
