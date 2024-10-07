@@ -76,7 +76,7 @@ const BillSplitter = () => {
     }
 
     const totalWithTax = amount * (1 + taxRate);
-    const totalWithTip = totalWithTax + (tip * amount);
+    const totalWithTip = totalWithTax + ( (tip/100) * amount);
     const perPerson = totalWithTip / people;
 
     setResult(perPerson.toFixed(2));
