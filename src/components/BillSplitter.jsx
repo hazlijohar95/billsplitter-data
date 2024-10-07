@@ -71,6 +71,22 @@ const BillSplitter = () => {
     calculateSplit();
   }, [preTaxAmount, splitWays, tipPercentage, customTip, taxRate]);
 
+  const formatDollarAmount = (value) => {
+    const numericValue = value.replace(/[^\d.]/g, '');
+    const formattedValue = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(numericValue || 0);
+    return formattedValue;
+  };
+
+  const handlePreTaxAmountChange = (e) => {
+    const rawValue = e.target.value.replace(/[^\d.]/g, '');
+    setPreTaxAmount(rawValue);
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
@@ -80,10 +96,11 @@ const BillSplitter = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Pre-tax Amount</label>
           <Input
-            type="number"
-            value={preTaxAmount}
-            onChange={(e) => setPreTaxAmount(e.target.value)}
-            placeholder="Enter pre-tax amount"
+            type="text"
+            value={formatDollarAmount(preTaxAmount)}
+            onChange={handlePreTaxAmountChange}
+            placeholder="$0.00"
+            className="placeholder-gray-300"
           />
         </div>
         <div>
@@ -97,13 +114,18 @@ const BillSplitter = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Tip Percentage</label>
-          <ToggleGroup type="single" value={tipPercentage} onValueChange={(value) => setTipPercentage(value || tipPercentage)}>
+          <ToggleGroup 
+            type="single" 
+            value={tipPercentage} 
+            onValueChange={(value) => setTipPercentage(value || tipPercentage)}
+            className="bg-gray-200"
+          >
             {[15, 18, 20, 25].map((tip) => (
-              <ToggleGroupItem key={tip} value={tip} aria-label={`${tip}% tip`}>
+              <ToggleGroupItem key={tip} value={tip} aria-label={`${tip}% tip`} className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
                 {tip}%
               </ToggleGroupItem>
             ))}
-            <ToggleGroupItem value="custom" aria-label="Custom tip">
+            <ToggleGroupItem value="custom" aria-label="Custom tip" className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
               Custom
             </ToggleGroupItem>
           </ToggleGroup>

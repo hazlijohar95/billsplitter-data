@@ -1,43 +1,29 @@
 import * as React from "react"
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group"
-
 import { cn } from "@/lib/utils"
-import { toggleVariants } from "@/components/ui/toggle"
 
-const ToggleGroupContext = React.createContext({
-  size: "default",
-  variant: "default",
-})
-
-const ToggleGroup = React.forwardRef(({ className, variant, size, children, ...props }, ref) => (
+const ToggleGroup = React.forwardRef(({ className, ...props }, ref) => (
   <ToggleGroupPrimitive.Root
     ref={ref}
-    className={cn("flex items-center justify-center gap-1", className)}
-    {...props}>
-    <ToggleGroupContext.Provider value={{ variant, size }}>
-      {children}
-    </ToggleGroupContext.Provider>
-  </ToggleGroupPrimitive.Root>
+    className={cn(
+      "inline-flex bg-gray-200 rounded-md p-1",
+      className
+    )}
+    {...props} />
 ))
-
 ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName
 
-const ToggleGroupItem = React.forwardRef(({ className, children, variant, size, ...props }, ref) => {
-  const context = React.useContext(ToggleGroupContext)
-
-  return (
-    (<ToggleGroupPrimitive.Item
-      ref={ref}
-      className={cn(toggleVariants({
-        variant: context.variant || variant,
-        size: context.size || size,
-      }), className)}
-      {...props}>
-      {children}
-    </ToggleGroupPrimitive.Item>)
-  );
-})
-
+const ToggleGroupItem = React.forwardRef(({ className, children, ...props }, ref) => (
+  <ToggleGroupPrimitive.Item
+    ref={ref}
+    className={cn(
+      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
+      className
+    )}
+    {...props}>
+    {children}
+  </ToggleGroupPrimitive.Item>
+))
 ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName
 
 export { ToggleGroup, ToggleGroupItem }
