@@ -93,7 +93,7 @@ const BillSplitter = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Pre-tax Amount</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Pre-Tax Amount</label>
           <Input
             type="number"
             value={preTaxAmount}
@@ -101,7 +101,7 @@ const BillSplitter = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Number of People</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Number of Ways to Split</label>
           <Input
             type="number"
             value={splitWays}
