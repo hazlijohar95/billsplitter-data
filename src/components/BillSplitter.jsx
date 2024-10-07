@@ -98,6 +98,7 @@ const BillSplitter = () => {
             type="number"
             value={preTaxAmount}
             onChange={(e) => setPreTaxAmount(e.target.value)}
+            placeholder="$0.00"
           />
         </div>
         <div>
