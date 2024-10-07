@@ -50,16 +50,6 @@ const BillSplitter = () => {
     }
   }, []);
 
-  const formatDollarAmount = (value) => {
-    const numericValue = parseFloat(value.replace(/[^\d.]/g, ''));
-    return isNaN(numericValue) ? '' : numericValue.toFixed(2);
-  };
-
-  const handlePreTaxAmountChange = (e) => {
-    const formattedValue = formatDollarAmount(e.target.value);
-    setPreTaxAmount(formattedValue);
-  };
-
   const calculateSplit = () => {
     const amount = parseFloat(preTaxAmount);
     const people = parseInt(splitWays);
@@ -90,11 +80,9 @@ const BillSplitter = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Pre-tax Amount</label>
           <Input
-            type="text"
+            type="number"
             value={preTaxAmount}
-            onChange={handlePreTaxAmountChange}
-            placeholder="$0.00"
-            className="placeholder-gray-300"
+            onChange={(e) => setPreTaxAmount(e.target.value)}
           />
         </div>
         <div>
