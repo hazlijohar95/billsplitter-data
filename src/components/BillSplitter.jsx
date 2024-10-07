@@ -154,7 +154,7 @@ const BillSplitter = () => {
           <h3 className="text-lg font-semibold">Each Person Owes:</h3>
           <p className="text-3xl font-bold">${result}</p>
           <p className="text-sm mt-2">
-            State: {userState ? stateNames[userState] : 'Not selected'} | Tax Rate: {(taxRate * 100).toFixed(3)}%
+            Selected State: {userState ? stateNames[userState] : 'N/A'} | Tax Rate: {(taxRate * 100).toFixed(3)}%
           </p>
         </div>
       </CardContent>
