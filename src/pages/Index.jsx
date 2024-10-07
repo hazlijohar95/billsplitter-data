@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import BillSplitter from '../components/BillSplitter';
 
 const backgrounds = [
-  'https://source.unsplash.com/random/1920x1080?abstract,art,1',
-  'https://source.unsplash.com/random/1920x1080?abstract,art,2',
-  'https://source.unsplash.com/random/1920x1080?abstract,art,3',
-  'https://source.unsplash.com/random/1920x1080?abstract,art,4',
+  'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1920&h=1080&fit=crop',
+  'https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=1920&h=1080&fit=crop',
+  'https://images.unsplash.com/photo-1507908708918-778587c9e563?w=1920&h=1080&fit=crop',
+  'https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=1920&h=1080&fit=crop',
 ];
 
 const Index = () => {
