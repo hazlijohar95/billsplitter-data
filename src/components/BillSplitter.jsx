@@ -71,22 +71,6 @@ const BillSplitter = () => {
     calculateSplit();
   }, [preTaxAmount, splitWays, tipPercentage, customTip, taxRate]);
 
-  const formatDollarAmount = (value) => {
-    const numericValue = value.replace(/[^\d.]/g, '');
-    const formattedValue = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(numericValue || 0);
-    return formattedValue;
-  };
-
-  const handlePreTaxAmountChange = (e) => {
-    const rawValue = e.target.value.replace(/[^\d.]/g, '');
-    setPreTaxAmount(rawValue);
-  };
-
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
@@ -96,9 +80,9 @@ const BillSplitter = () => {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Pre-tax Amount</label>
           <Input
-            type="text"
-            value={formatDollarAmount(preTaxAmount)}
-            onChange={handlePreTaxAmountChange}
+            type="number"
+            value={preTaxAmount}
+            onChange={(e) => setPreTaxAmount(e.target.value)}
             placeholder="$0.00"
             className="placeholder-gray-300"
           />
@@ -118,7 +102,7 @@ const BillSplitter = () => {
             type="single" 
             value={tipPercentage} 
             onValueChange={(value) => setTipPercentage(value || tipPercentage)}
-            className="bg-gray-200"
+            className="bg-gray-300"
           >
             {[15, 18, 20, 25].map((tip) => (
               <ToggleGroupItem key={tip} value={tip} aria-label={`${tip}% tip`} className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
