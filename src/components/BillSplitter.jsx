@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const stateTaxRates = {
   'AL': 0.04, 'AK': 0.00, 'AZ': 0.056, 'AR': 0.065, 'CA': 0.0725, 'CO': 0.029, 'CT': 0.0635,
@@ -12,6 +13,19 @@ const stateTaxRates = {
   'OK': 0.045, 'OR': 0.00, 'PA': 0.06, 'RI': 0.07, 'SC': 0.06, 'SD': 0.045, 'TN': 0.07,
   'TX': 0.0625, 'UT': 0.061, 'VT': 0.06, 'VA': 0.053, 'WA': 0.065, 'WV': 0.06, 'WI': 0.05,
   'WY': 0.04
+};
+
+const stateNames = {
+  'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
+  'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
+  'HI': 'Hawaii', 'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+  'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine', 'MD': 'Maryland',
+  'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota', 'MS': 'Mississippi', 'MO': 'Missouri',
+  'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey',
+  'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+  'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island', 'SC': 'South Carolina',
+  'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
 };
 
 const BillSplitter = () => {
@@ -31,24 +45,25 @@ const BillSplitter = () => {
           const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
           const data = await response.json();
           const state = data.principalSubdivisionCode.split('-')[1];
-          setUserState(state);
-          setTaxRate(stateTaxRates[state] || 0);
+          if (state in stateTaxRates) {
+            setUserState(state);
+            setTaxRate(stateTaxRates[state]);
+          }
         } catch (error) {
           console.error("Error fetching location data:", error);
-          setUserState('Unknown');
-          setTaxRate(0);
         }
       }, (error) => {
         console.error("Error getting geolocation:", error);
-        setUserState('Unknown');
-        setTaxRate(0);
       });
     } else {
       console.log("Geolocation is not supported by this browser.");
-      setUserState('Unknown');
-      setTaxRate(0);
     }
   }, []);
+
+  const handleStateChange = (state) => {
+    setUserState(state);
+    setTaxRate(stateTaxRates[state]);
+  };
 
   const calculateSplit = () => {
     const amount = parseFloat(preTaxAmount);
@@ -95,6 +110,19 @@ const BillSplitter = () => {
           />
         </div>
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+          <Select value={userState} onValueChange={handleStateChange}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a state" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(stateNames).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => (
+                <SelectItem key={code} value={code}>{name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Tip Percentage</label>
           <ToggleGroup 
             type="single" 
@@ -125,7 +153,7 @@ const BillSplitter = () => {
           <h3 className="text-lg font-semibold">Each Person Owes:</h3>
           <p className="text-3xl font-bold">${result}</p>
           <p className="text-sm mt-2">
-            State: {userState} | Tax Rate: {(taxRate * 100).toFixed(3)}%
+            State: {userState ? stateNames[userState] : 'Not selected'} | Tax Rate: {(taxRate * 100).toFixed(3)}%
           </p>
         </div>
       </CardContent>
