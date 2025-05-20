@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 const fetchHitCount = async () => {
@@ -18,7 +19,7 @@ const HitCounter = () => {
   if (isLoading || isError) return null;
 
   return (
-    <div className="text-xs text-white/50 absolute bottom-2 right-2">
+    <div className="text-xs text-green-500/70 absolute bottom-2 right-2 font-mono">
       Visits: {hitCount}
     </div>
   );
