@@ -36,6 +36,7 @@ const BillSplitter = () => {
   const [result, setResult] = useState(0);
   const [userState, setUserState] = useState('');
   const [taxRate, setTaxRate] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -87,33 +88,43 @@ const BillSplitter = () => {
   }, [preTaxAmount, splitWays, tipPercentage, customTip, taxRate]);
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">Simple Bill Splitter</CardTitle>
+    <Card 
+      className="w-full max-w-md mx-auto transition-all duration-300 hover:shadow-[0_0_15px_rgba(74,222,128,0.4)] transform hover:-translate-y-1"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <CardHeader className="transition-colors duration-300">
+        <CardTitle className="text-2xl font-bold text-center relative">
+          <span className={`inline-block transition-all duration-300 ${isHovered ? 'text-green-400' : ''}`}>
+            Simple Bill Splitter
+          </span>
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div>
+        <div className="transition-all duration-200 hover:scale-[1.02]">
           <label className="block text-sm font-medium text-gray-700 mb-1">Pre-Tax Amount</label>
           <Input
             type="number"
             value={preTaxAmount}
             onChange={(e) => setPreTaxAmount(e.target.value)}
             placeholder="$0.00"
+            className="transition-all duration-200 focus:border-green-400 focus:ring-green-400"
           />
         </div>
-        <div>
+        <div className="transition-all duration-200 hover:scale-[1.02]">
           <label className="block text-sm font-medium text-gray-700 mb-1">Number of Ways to Split</label>
           <Input
             type="number"
             value={splitWays}
             onChange={(e) => setSplitWays(e.target.value)}
             placeholder="Enter number of people"
+            className="transition-all duration-200 focus:border-green-400 focus:ring-green-400"
           />
         </div>
-        <div>
+        <div className="transition-all duration-200 hover:scale-[1.02]">
           <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
           <Select value={userState} onValueChange={handleStateChange}>
-            <SelectTrigger>
+            <SelectTrigger className="transition-all duration-200 focus:border-green-400 focus:ring-green-400">
               <SelectValue placeholder="Select a state" />
             </SelectTrigger>
             <SelectContent>
@@ -132,11 +143,20 @@ const BillSplitter = () => {
             className="bg-gray-300"
           >
             {[15, 18, 20, 25].map((tip) => (
-              <ToggleGroupItem key={tip} value={tip} aria-label={`${tip}% tip`} className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
+              <ToggleGroupItem 
+                key={tip} 
+                value={tip} 
+                aria-label={`${tip}% tip`} 
+                className="data-[state=on]:bg-green-500 data-[state=on]:text-primary-foreground transition-all duration-200"
+              >
                 {tip}%
               </ToggleGroupItem>
             ))}
-            <ToggleGroupItem value="custom" aria-label="Custom tip" className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground">
+            <ToggleGroupItem 
+              value="custom" 
+              aria-label="Custom tip" 
+              className="data-[state=on]:bg-green-500 data-[state=on]:text-primary-foreground transition-all duration-200"
+            >
               Custom
             </ToggleGroupItem>
           </ToggleGroup>
@@ -146,13 +166,15 @@ const BillSplitter = () => {
               value={customTip}
               onChange={(e) => setCustomTip(e.target.value)}
               placeholder="Enter custom tip %"
-              className="mt-2"
+              className="mt-2 transition-all duration-200 focus:border-green-400 focus:ring-green-400"
             />
           )}
         </div>
         <div className="text-center">
           <h3 className="text-lg font-semibold">Each Person Owes:</h3>
-          <p className="text-3xl font-bold">${result}</p>
+          <p className={`text-3xl font-bold transition-all duration-500 ${isHovered ? 'text-green-500 scale-110' : ''}`}>
+            ${result}
+          </p>
           <p className="text-sm mt-2">
             Selected State: {userState ? stateNames[userState] : 'N/A'} | Tax Rate: {(taxRate * 100).toFixed(3)}%
           </p>
