@@ -19,7 +19,7 @@ const Index = () => {
       </div>
       
       <div className="mt-4 text-green-400 text-sm font-semibold z-10 hover:text-green-300 transition-all duration-300">
-        Like this? <a href="https://buymeacoffee.com/justinyu" target="_blank" rel="noopener noreferrer" className="underline hover:text-yellow-300 transition-colors">Donate</a>
+        Like this? <a href="https://buymeacoffee.com/hazlijohar" target="_blank" rel="noopener noreferrer" className="underline hover:text-yellow-300 transition-colors">Donate</a>
       </div>
       
       <HitCounter />
