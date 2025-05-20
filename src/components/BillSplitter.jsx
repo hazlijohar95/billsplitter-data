@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,7 @@ const stateTaxRates = {
   'NH': 0.00, 'NJ': 0.06625, 'NM': 0.05125, 'NY': 0.08875, 'NC': 0.0475, 'ND': 0.05, 'OH': 0.0575,
   'OK': 0.045, 'OR': 0.00, 'PA': 0.06, 'RI': 0.07, 'SC': 0.06, 'SD': 0.045, 'TN': 0.07,
   'TX': 0.0625, 'UT': 0.061, 'VT': 0.06, 'VA': 0.053, 'WA': 0.065, 'WV': 0.06, 'WI': 0.05,
-  'WY': 0.04
+  'WY': 0.04, 'MY': 0.06
 };
 
 const stateNames = {
@@ -25,7 +26,8 @@ const stateNames = {
   'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
   'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island', 'SC': 'South Carolina',
   'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
-  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
+  'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming',
+  'MY': 'Malaysia'
 };
 
 const BillSplitter = () => {
@@ -142,7 +144,7 @@ const BillSplitter = () => {
             onValueChange={(value) => setTipPercentage(value || tipPercentage)}
             className="bg-gray-300"
           >
-            {[15, 18, 20, 25].map((tip) => (
+            {[0, 15, 18, 20].map((tip) => (
               <ToggleGroupItem 
                 key={tip} 
                 value={tip} 
