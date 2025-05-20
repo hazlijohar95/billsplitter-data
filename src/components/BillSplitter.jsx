@@ -5,6 +5,9 @@ import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+/**
+ * State tax rates mapping (state code to tax rate percentage)
+ */
 const stateTaxRates = {
   'AL': 0.04, 'AK': 0.00, 'AZ': 0.056, 'AR': 0.065, 'CA': 0.0725, 'CO': 0.029, 'CT': 0.0635,
   'DE': 0.00, 'FL': 0.06, 'GA': 0.04, 'HI': 0.04, 'ID': 0.06, 'IL': 0.0625, 'IN': 0.07,
@@ -16,6 +19,9 @@ const stateTaxRates = {
   'WY': 0.04, 'MY': 0.06
 };
 
+/**
+ * State names mapping (state code to full state name)
+ */
 const stateNames = {
   'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
   'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
@@ -30,7 +36,12 @@ const stateNames = {
   'MY': 'Malaysia'
 };
 
+/**
+ * BillSplitter component for splitting bills between multiple people
+ * with tip calculation and tax rate by state
+ */
 const BillSplitter = () => {
+  // State declarations
   const [preTaxAmount, setPreTaxAmount] = useState('');
   const [splitWays, setSplitWays] = useState('');
   const [tipPercentage, setTipPercentage] = useState(15);
@@ -40,6 +51,10 @@ const BillSplitter = () => {
   const [taxRate, setTaxRate] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
+  /**
+   * Attempt to get user's location on component mount
+   * and set the appropriate state tax rate
+   */
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(async (position) => {
@@ -63,11 +78,28 @@ const BillSplitter = () => {
     }
   }, []);
 
+  /**
+   * Handle state selection and update tax rate
+   * @param {string} state - Selected state code
+   */
   const handleStateChange = (state) => {
     setUserState(state);
     setTaxRate(stateTaxRates[state]);
   };
 
+  /**
+   * Handle tip percentage selection
+   * @param {number|string} value - Selected tip percentage or 'custom'
+   */
+  const handleTipChange = (value) => {
+    // Convert string number values to actual numbers
+    const numericValue = value === 'custom' ? 'custom' : Number(value);
+    setTipPercentage(numericValue);
+  };
+
+  /**
+   * Calculate the split amount per person
+   */
   const calculateSplit = () => {
     const amount = parseFloat(preTaxAmount);
     const people = parseInt(splitWays);
@@ -79,12 +111,13 @@ const BillSplitter = () => {
     }
 
     const totalWithTax = amount * (1 + taxRate);
-    const totalWithTip = totalWithTax + ( (tip/100) * amount);
+    const totalWithTip = totalWithTax + ((tip / 100) * amount);
     const perPerson = totalWithTip / people;
 
     setResult(perPerson.toFixed(2));
   };
 
+  // Recalculate when inputs change
   useEffect(() => {
     calculateSplit();
   }, [preTaxAmount, splitWays, tipPercentage, customTip, taxRate]);
@@ -140,14 +173,14 @@ const BillSplitter = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1">Tip Percentage</label>
           <ToggleGroup 
             type="single" 
-            value={tipPercentage} 
-            onValueChange={(value) => setTipPercentage(value || tipPercentage)}
+            value={String(tipPercentage)} // Convert to string to fix the 0% selection issue
+            onValueChange={(value) => handleTipChange(value)}
             className="bg-gray-300"
           >
             {[0, 15, 18, 20].map((tip) => (
               <ToggleGroupItem 
                 key={tip} 
-                value={tip} 
+                value={String(tip)} // Convert to string to match the value prop type
                 aria-label={`${tip}% tip`} 
                 className="data-[state=on]:bg-green-500 data-[state=on]:text-primary-foreground transition-all duration-200"
               >
